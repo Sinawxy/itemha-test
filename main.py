@@ -18,19 +18,23 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 def get_dota2_items():
     url = f"https://api.steamwebapi.com/v1/market/items?game_id=570&key={STEAM_API_KEY}"
     res = requests.get(url).json()
-    if res["success"]:
-        return res["data"]["items"]  # لیست آیتم‌ها
+    
+    # بررسی اینکه data وجود داره
+    if "data" in res and "items" in res["data"]:
+        return res["data"]["items"]
     else:
         return []
+
 
 # ======= گرفتن جزئیات آیتم =======
 def get_item_details(item_id):
     url = f"https://api.steamwebapi.com/v1/market/item/{item_id}?key={STEAM_API_KEY}"
     res = requests.get(url).json()
-    if res["success"]:
+    if "data" in res:
         return res["data"]
     else:
         return None
+
 
 # ======= هندلر دکمه‌ها =======
 async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
